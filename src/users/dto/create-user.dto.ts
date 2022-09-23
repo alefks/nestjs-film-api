@@ -1,14 +1,14 @@
 import { IsNotEmpty, Matches } from 'class-validator';
+import { MessagesHelper } from '../../helpers/messages.helper';
 import { RegExHelper } from '../../helpers/regex.helper';
 
 export class CreateUserDto {
   @IsNotEmpty()
-  name: string;
+  username: string;
 
   @IsNotEmpty()
   @Matches(RegExHelper.password, {
-    message:
-      'A senha deve conter caracteres maiusculos, minusculos, numeros e caracteres especiais.',
+    message: MessagesHelper.PASSWORD_INVALID,
   })
   password: string;
 }
