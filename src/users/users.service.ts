@@ -18,11 +18,17 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.usersRepository.find({ select: ['id', 'name'] });
+    return await this.usersRepository.find({ select: ['id', 'username'] });
   }
 
-  async findOne(id: number) {
+  async findOneById(id: number) {
     return this.usersRepository.findOneOrFail({ where: { id: id } });
+  }
+
+  async findOneByUsername(username: string) {
+    return this.usersRepository.findOneOrFail({
+      where: { username: username },
+    });
   }
 
   async update(id: number, data: UpdateUserDto) {
