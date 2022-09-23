@@ -6,6 +6,9 @@ export class CreateUserDto {
   name: string;
 
   @IsNotEmpty()
-  @Matches(RegExHelper.password)
+  @Matches(RegExHelper.password, {
+    message:
+      'A senha deve conter caracteres maiusculos, minusculos, numeros e caracteres especiais.',
+  })
   password: string;
 }
