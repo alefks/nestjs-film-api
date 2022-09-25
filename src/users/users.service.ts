@@ -1,5 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { genSaltSync, hashSync } from 'bcrypt';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -22,7 +27,17 @@ export class UsersService {
   }
 
   async findOneById(id: number) {
-    return this.usersRepository.findOneOrFail({ where: { id: id } });
+    let user: UsersEntity;
+    try {
+      user = await this.usersRepository.findOneOrFail({
+        where: { id: id },
+        select: { id: true, username: true, createdAt: true },
+      });
+    } catch (error) {
+      throw new NotFoundException('User not found.');
+    }
+
+    return user;
   }
 
   async findOneByUsername(username: string) {
@@ -31,16 +46,32 @@ export class UsersService {
     });
   }
 
-  async update(id: number, data: UpdateUserDto) {
-    const user = await this.usersRepository.findOneOrFail({
-      where: { id: id },
-    });
-    await this.usersRepository.merge(user, data);
-    return await this.usersRepository.save(user);
+  async update(id: number, body: UpdateUserDto) {
+    let user: UsersEntity;
+    try {
+      user = await this.usersRepository.findOneOrFail({
+        where: { id: id },
+      });
+    } catch (error) {
+      throw new NotFoundException('User not found.');
+    }
+
+    if (body.password) {
+      const salt = genSaltSync();
+      body.password = hashSync(body.password, salt);
+    }
+
+    await this.usersRepository.merge(user, body);
+    await this.usersRepository.save(user);
   }
 
   async remove(id: number) {
-    await this.usersRepository.findOneOrFail({ where: { id: id } });
-    return this.usersRepository.softDelete({ id });
+    try {
+      await this.usersRepository.findOneOrFail({ where: { id: id } });
+    } catch (error) {
+      throw new NotFoundException();
+    }
+
+    return await this.usersRepository.softDelete({ id });
   }
 }
