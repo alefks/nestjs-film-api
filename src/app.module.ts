@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { FilmsModule } from './films/films.module';
+import { GenresModule } from './genres/genres.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { AuthModule } from './auth/auth.module';
     } as TypeOrmModuleOptions),
     UsersModule,
     AuthModule,
+    FilmsModule,
+    GenresModule,
   ],
   controllers: [AppController],
   providers: [AppService],
