@@ -23,7 +23,7 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.usersRepository.find({ select: ['id', 'username'] });
+    return await this.usersRepository.find();
   }
 
   async findOneById(id: number) {
@@ -43,6 +43,7 @@ export class UsersService {
   async findOneByUsername(username: string) {
     return this.usersRepository.findOneOrFail({
       where: { username: username },
+      select: { id: true, username: true, password: true },
     });
   }
 
