@@ -14,7 +14,6 @@ import { UpdateFilmDto } from './dto/update-film.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('films')
-@UseGuards(AuthGuard('jwt'))
 export class FilmsController {
   constructor(private readonly filmsService: FilmsService) {}
 
