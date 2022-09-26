@@ -6,37 +6,45 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { GenresService } from './genres.service';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('genres')
 export class GenresController {
   constructor(private readonly genresService: GenresService) {}
 
-  @Post()
-  create(@Body() createGenreDto: CreateGenreDto) {
-    return this.genresService.create(createGenreDto);
+  @UseGuards(AuthGuard('jwt'))
+  @Post('create')
+  async create(@Body() createGenreDto: CreateGenreDto) {
+    return await this.genresService.create(createGenreDto);
   }
 
   @Get()
-  findAll() {
-    return this.genresService.findAll();
+  async findAll() {
+    return await this.genresService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.genresService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    return await this.genresService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGenreDto: UpdateGenreDto) {
-    return this.genresService.update(+id, updateGenreDto);
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('update/:id')
+  async update(
+    @Param('id') id: number,
+    @Body() updateGenreDto: UpdateGenreDto,
+  ) {
+    return await this.genresService.update(id, updateGenreDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.genresService.remove(+id);
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('delete/:id')
+  async remove(@Param('id') id: number) {
+    return await this.genresService.remove(id);
   }
 }
