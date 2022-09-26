@@ -22,7 +22,7 @@ export class GenresService {
   }
 
   async findAll() {
-    return this.genresService.find();
+    return this.genresService.find({ relations: { films: true } });
   }
 
   async findOne(id: number) {
