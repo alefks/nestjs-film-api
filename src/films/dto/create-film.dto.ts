@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Genre } from '../../genres/entities/genre.entity';
 
 export class CreateFilmDto {
   @IsNotEmpty()
@@ -13,10 +14,14 @@ export class CreateFilmDto {
   @IsNumber()
   releaseYear: number;
 
-  @IsOptional()
+  @IsNotEmpty()
+  @IsNumber()
+  imdb: number;
+
+  @IsNotEmpty()
   @IsNumber(
     {},
-    { each: true, message: 'Genres needs to be an array of numbers.' },
+    { each: true, message: 'Genres field needs to be an array of numbers.' },
   )
-  genres: number[];
+  genres: Genre[];
 }
