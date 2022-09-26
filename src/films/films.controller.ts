@@ -17,7 +17,8 @@ import { AuthGuard } from '@nestjs/passport';
 export class FilmsController {
   constructor(private readonly filmsService: FilmsService) {}
 
-  @Post()
+  @UseGuards(AuthGuard('jwt'))
+  @Post('create')
   create(@Body() createFilmDto: CreateFilmDto) {
     return this.filmsService.create(createFilmDto);
   }
@@ -32,11 +33,13 @@ export class FilmsController {
     return this.filmsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateFilmDto: UpdateFilmDto) {
     return this.filmsService.update(+id, updateFilmDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.filmsService.remove(+id);
