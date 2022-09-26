@@ -29,19 +29,19 @@ export class FilmsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.filmsService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.filmsService.findOne(id);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch('update/:id')
-  update(@Param('id') id: string, @Body() updateFilmDto: UpdateFilmDto) {
-    return this.filmsService.update(+id, updateFilmDto);
+  update(@Param('id') id: number, @Body() updateFilmDto: UpdateFilmDto) {
+    return this.filmsService.update(id, updateFilmDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.filmsService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.filmsService.remove(id);
   }
 }
