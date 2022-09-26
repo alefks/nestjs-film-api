@@ -1,26 +1,71 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Genre } from '../genres/entities/genre.entity';
 import { CreateFilmDto } from './dto/create-film.dto';
 import { UpdateFilmDto } from './dto/update-film.dto';
+import { Film } from './entities/film.entity';
 
 @Injectable()
 export class FilmsService {
-  create(createFilmDto: CreateFilmDto) {
-    return 'This action adds a new film';
+  constructor(
+    @InjectRepository(Film)
+    private readonly filmsService: Repository<Film>,
+  ) {}
+
+  async create(createFilmDto: CreateFilmDto) {
+    return await this.filmsService
+      .createQueryBuilder()
+      .relation(Film, 'genres')
+      .of(1)
+      .add(1);
   }
 
-  findAll() {
-    return `This action returns all films`;
+  async findAll() {
+    return this.filmsService.find({ relations: { genres: true } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} film`;
+  async findOne(id: number) {
+    let film: Film;
+    try {
+      film = await this.filmsService.findOneOrFail({
+        where: { id: id },
+        relations: { genres: true },
+      });
+    } catch (error) {
+      throw new NotFoundException('Film not found.');
+    }
+
+    return film;
   }
 
-  update(id: number, updateFilmDto: UpdateFilmDto) {
-    return `This action updates a #${id} film`;
+  async update(id: number, updateFilmDto: UpdateFilmDto) {
+
+    let film: Film;
+    try {
+      film = await this.filmsService.findOneOrFail({
+        where: { id: id },
+      });
+    } catch (error) {
+      throw new NotFoundException('Film not found.');
+    }
+
+    await this.filmsService.merge(film, updateFilmDto);
+    await this.filmsService.save(film);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} film`;
+  async remove(id: number) {
+    let film: Film;
+
+    try {
+      film = await this.filmsService.findOneOrFail({ where: { id: id } });
+    } catch (error) {
+      throw new NotFoundException('Film not found.');
+    }
+    return await this.filmsService.softDelete({ id });
   }
 }
