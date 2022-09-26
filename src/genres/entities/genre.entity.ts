@@ -5,9 +5,10 @@ import { Film } from '../../films/entities/film.entity';
 export class Genre {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
+
+  @Column({ unique: true })
   name: string;
 
   @ManyToMany(() => Film, (film) => film.genres)
-  films: Film[];
+  films?: Film[];
 }
