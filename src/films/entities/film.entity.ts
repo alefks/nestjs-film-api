@@ -1,14 +1,27 @@
-import { Entity, JoinTable, ManyToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Genre } from '../../genres/entities/genre.entity';
 
 @Entity()
 export class Film {
-  titulo: string;
-  capa: string;
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ unique: true })
+  title: string;
+
+  @Column()
   cover: string;
-  anoLancamento: Date;
+
+  @Column()
+  releaseYear: Date;
 
   @ManyToMany(() => Genre, (genre) => genre.films)
   @JoinTable()
-  genres: Genre[];
+  genres?: Genre[];
 }
