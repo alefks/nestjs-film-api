@@ -19,9 +19,12 @@ export class Film {
   cover: string;
 
   @Column()
-  releaseYear: Date;
+  releaseYear: number;
+
+  @Column({ type: 'real' })
+  imdb: number;
 
   @ManyToMany(() => Genre, (genre) => genre.films)
   @JoinTable()
-  genres?: Genre[];
+  genres: Genre[];
 }
