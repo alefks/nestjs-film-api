@@ -17,12 +17,24 @@ export class FilmsService {
     private readonly filmsService: Repository<Film>,
   ) {}
 
+  async filmTitleValidation(filmTitle: string) {
+    const filmTitleValidation = await this.filmsService.findOne({
+      where: { title: filmTitle },
+    });
+
+    if (filmTitleValidation)
+      throw new BadRequestException('Film title already exists.');
+  }
+
   async create(createFilmDto: CreateFilmDto) {
-    return await this.filmsService
-      .createQueryBuilder()
-      .relation(Film, 'genres')
-      .of(1)
-      .add(1);
+    await this.filmTitleValidation(createFilmDto.title);
+
+    createFilmDto.genres = <any>(
+      createFilmDto.genres.map((id) => ({ ...new Genre(), id: id }))
+    );
+
+    const filmEntity = this.filmsService.create(createFilmDto);
+    return await this.filmsService.save(filmEntity);
   }
 
   async findAll() {
@@ -44,7 +56,6 @@ export class FilmsService {
   }
 
   async update(id: number, updateFilmDto: UpdateFilmDto) {
-
     let film: Film;
     try {
       film = await this.filmsService.findOneOrFail({
