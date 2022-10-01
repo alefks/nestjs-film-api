@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Film } from '../films/entities/film.entity';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { Genre } from './entities/genre.entity';
@@ -16,9 +17,24 @@ export class GenresService {
     private readonly genresService: Repository<Genre>,
   ) {}
 
+  async genreNameValidation(genreName: string) {
+    const genreNameValidation = this.genresService.findOne({
+      where: { name: genreName },
+    });
+
+    if (!genreNameValidation)
+      throw new BadRequestException('Genre name already exists.');
+  }
+
   async create(createGenreDto: CreateGenreDto) {
-    const genre = this.genresService.create(createGenreDto);
-    return await this.genresService.save(genre);
+    this.genreNameValidation(createGenreDto.name);
+
+    createGenreDto.films = <any>(
+      createGenreDto.films.map((id) => ({ ...new Film(), id: id }))
+    );
+
+    const genreEntity = this.genresService.create(createGenreDto);
+    return await this.genresService.save(genreEntity);
   }
 
   async findAll() {
