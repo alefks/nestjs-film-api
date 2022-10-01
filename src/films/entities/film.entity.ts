@@ -24,7 +24,7 @@ export class Film {
   @Column({ type: 'real' })
   imdb: number;
 
-  @ManyToMany(() => Genre, (genre) => genre.films)
+  @ManyToMany(() => Genre, (genre) => genre.films, { cascade: true })
   @JoinTable()
   genres: Genre[];
 }
