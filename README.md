@@ -14,7 +14,7 @@ A aplicação pode ser *dockerizada*, isso significa que dispensa grandes config
 
 ## Como subir um container do Docker com a aplicação
 ---
-![Imagem do Docker](https://www.mundodocker.com.br/wp-content/uploads/2015/06/docker_facebook_share.png)
+
 
 >Certifique-se de que você possui o [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado na sua máquina, **é necessário** para que possamos subir o container com a API e suas dependências.
 
