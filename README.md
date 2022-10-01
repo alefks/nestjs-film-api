@@ -3,7 +3,9 @@
 </p>
 
 ## Descrição do projeto
----
+
+ **Disclaimer: This project was created for study purposes only. I do not own neither images of Nestjs nor Docker.**
+
 API de filmes em desenvolvimento utilizando: [Nestjs](https://github.com/nestjs/nest), PostgreSQL, TypeScript, TypeORM, autenticação JWT e Docker.
 
 ## Instalação
