@@ -2,72 +2,47 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descrição do projeto
+---
+API de filmes em desenvolvimento utilizando: [Nestjs](https://github.com/nestjs/nest), PostgreSQL, TypeScript, TypeORM, autenticação JWT e Docker.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Instalação
+---
+A aplicação pode ser *dockerizada*, isso significa que dispensa grandes configurações locais como nos projetos convencionais e você consegue rodá-la com um comando apenas basicamente. 
 
-## Description
+## Como subir um container do Docker com a aplicação
+---
+![Imagem do Docker](https://www.mundodocker.com.br/wp-content/uploads/2015/06/docker_facebook_share.png)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+>Certifique-se de que você possui o [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado na sua máquina, **é necessário** para que possamos subir o container com a API e suas dependências.
 
-## Installation
+Devemos configurar as variáveis de ambiente primeiro. Na raiz do projeto temos o arquivo *.env.example*, como o próprio nome sugere é um exemplo das variáveis que você pode definir no seu *.env*.
+
+>É importante lembrar que a única variável de ambiente OBRIGATÓRIA para utilizarmos o Postgres é a variável *POSTGRES_PASSWORD*, a qual vai definir a senha do *superuser*. Caso você não defina um usuário, por padrão será *postgres*. 
+[Leia a documentação oficial do Postgres no DockerHub.](https://hub.docker.com/_/postgres)
+
+Após configurar as variáveis de ambiente, podemos rodar o seguinte comando no terminal:
+
 
 ```bash
-$ npm install
+$ docker-compose up
 ```
+## Autenticação JWT
+---
+Após criar seu usuário, você deverá passar o Header *Authorization* com o valor *Bearer seuTokenDeAcesso*. Dessa forma você poderá ter acesso as rotas administrativas da API.
 
-## Running the app
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## Support
-
+---
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
-
+---
 - Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
 - Website - [https://nestjs.com](https://nestjs.com/)
 - Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
-
+---
 Nest is [MIT licensed](LICENSE).
