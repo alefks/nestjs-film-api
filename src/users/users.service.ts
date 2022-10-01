@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { genSaltSync, hashSync } from 'bcrypt';
 import { Repository } from 'typeorm';
+import { MessagesHelper } from '../helpers/messages.helper';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersEntity } from './entities/users.entity';
@@ -18,6 +19,13 @@ export class UsersService {
   ) {}
 
   async create(data: CreateUserDto) {
+    const userValidation = await this.usersRepository.findOne({
+      where: { username: data.username },
+    });
+
+    if (userValidation)
+      throw new BadRequestException('User already exists with this username.');
+
     const user = this.usersRepository.create(data);
     return await this.usersRepository.save(user);
   }
@@ -34,7 +42,7 @@ export class UsersService {
         select: { id: true, username: true, createdAt: true },
       });
     } catch (error) {
-      throw new NotFoundException('User not found.');
+      throw new NotFoundException(MessagesHelper.USER_NOT_FOUND);
     }
 
     return user;
@@ -54,7 +62,7 @@ export class UsersService {
         where: { id: id },
       });
     } catch (error) {
-      throw new NotFoundException('User not found.');
+      throw new NotFoundException(MessagesHelper.USER_NOT_FOUND);
     }
 
     if (body.password) {
@@ -70,7 +78,7 @@ export class UsersService {
     try {
       await this.usersRepository.findOneOrFail({ where: { id: id } });
     } catch (error) {
-      throw new NotFoundException();
+      throw new NotFoundException(MessagesHelper.USER_NOT_FOUND);
     }
 
     return await this.usersRepository.softDelete({ id });
