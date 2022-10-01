@@ -8,6 +8,6 @@ import { Film } from '../films/entities/film.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Genre, Film])],
   controllers: [GenresController],
-  providers: [GenresService]
+  providers: [GenresService],
 })
 export class GenresModule {}
